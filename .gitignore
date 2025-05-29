@@ -1,17 +1,34 @@
-node_modules
+# Node modules and environment
+node_modules/
 .env
 
-# Hardhat files
-/cache
-/artifacts
+# Hardhat build files
+cache/
+artifacts/
 
-# TypeChain files
-/typechain
-/typechain-types
+# Typechain generated types
+typechain/
+typechain-types/
 
-# solidity-coverage files
-/coverage
-/coverage.json
+# Solidity coverage output
+coverage/
+coverage.json
 
-# Hardhat Ignition default folder for deployments against a local node
-ignition/deployments/chain-31337
+# Ignition deployment records (local node specific)
+ignition/deployments/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# VS Code settings
+.vscode/
+
+# IDE/workspace config
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
