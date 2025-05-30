@@ -1,13 +1,40 @@
-# Sample Hardhat Project
+# 🧠 Muish Token (MUISH) – v1.0.0
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+**MuishToken** is the upgradeable ERC-20 token powering the in-game economy of **Muish Oddity: Mutant Monkfish**.
 
-Try running some of the following tasks:
+This repo includes full smart contract source, test suite, and deployment scripts for the MUISH token system.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
+---
+
+## 🪙 Token Features
+
+- ✅ ERC20 compliant: `name: "Muish Token"`, `symbol: "MUISH"`, `decimals: 18`
+- 🔒 Max supply cap: **1,000,000,000 MUISH**
+- 🔁 UUPS Upgradeable (via OpenZeppelin v5)
+- 🔐 Access-controlled minting, burning, pausing
+- 🔥 `roleBurn` allows multisig to burn from any address
+- 📦 Pausable, burnable, upgrade-safe
+
+---
+
+## 📜 Contracts
+
+| Contract | Role |
+|---------|------|
+| `MuishTokenV1_0_0.sol` | Core upgradeable ERC-20 token |
+| `TokenVesting.sol` | Cliff + linear multi-grant vesting |
+| `TimelockControllerWrapper.sol` | Owns and governs roles via timelock |
+| `GameHook.sol` | Simulated on-chain game interaction |
+
+---
+
+## 📂 Project Structure
+
+```bash
+contracts/
+scripts/
+test/
+.gitignore
+hardhat.config.js
+package.json
+README.md
