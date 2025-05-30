@@ -1,4 +1,3 @@
-// scripts/executeGrantViaTimelock.js
 const { ethers } = require("hardhat");
 
 async function main() {
@@ -13,20 +12,36 @@ async function main() {
   const grantRoleData = token.interface.encodeFunctionData("grantRole", [MINTER_ROLE, vestingAddress]);
   const salt = ethers.keccak256(ethers.toUtf8Bytes("grant-minter-to-vesting"));
   const predecessor = ethers.ZeroHash;
+  const delay = 3600; // must match Timelock's delay
 
+  // 1. Schedule the transaction
+  console.log("📅 Scheduling grantRole via Timelock...");
+  const scheduleTx = await timelock.schedule(
+    tokenAddress,
+    0,
+    grantRoleData,
+    predecessor,
+    salt,
+    delay
+  );
+  await scheduleTx.wait();
+  console.log("⏳ Scheduled. Waiting for timelock...");
+
+  // 2. Advance time on local/testnet node (not needed on mainnet)
   console.log("⏩ Advancing time by 1 hour to satisfy timelock...");
   await ethers.provider.send("evm_increaseTime", [3600]);
   await ethers.provider.send("evm_mine");
 
+  // 3. Execute the transaction
   console.log("🚀 Executing grantRole via Timelock...");
-  const tx = await timelock.execute(
+  const executeTx = await timelock.execute(
     tokenAddress,
     0,
     grantRoleData,
     predecessor,
     salt
   );
-  await tx.wait();
+  await executeTx.wait();
 
   console.log("✅ MINTER_ROLE granted to TokenVesting.");
 }
