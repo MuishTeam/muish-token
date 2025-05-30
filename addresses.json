@@ -1,0 +1,12 @@
+{
+  "amoy": {
+    "muishToken": "0xYourDeployedTokenAddress",
+    "vesting": "0xYourDeployedVestingAddress",
+    "timelock": "0xYourDeployedTimelockAddress"
+  },
+  "localhost": {
+    "muishToken": "0x0000000000000000000000000000000000000000",
+    "vesting": "0x0000000000000000000000000000000000000000",
+    "timelock": "0x0000000000000000000000000000000000000000"
+  }
+}
