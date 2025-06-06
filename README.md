@@ -9,7 +9,7 @@ This repo includes full smart contract source, test suite, and deployment script
 ## 🪙 Token Features
 
 - ✅ ERC20 compliant: `name: "Muish Token"`, `symbol: "MUISH"`, `decimals: 18`
-- 🔒 Max supply cap: **1,000,000,000 MUISH**
+- 🔒 Max supply cap: **12,000,000,000 MUISH**
 - 🔁 UUPS Upgradeable (via OpenZeppelin v5)
 - 🔐 Access-controlled minting, burning, pausing
 - 🔥 `roleBurn` allows multisig to burn from any address

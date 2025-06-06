@@ -1,10 +1,14 @@
 const { expect } = require("chai");
 const { ethers, upgrades } = require("hardhat");
 
+function toWei(val) {
+  return ethers.parseUnits(val.toString(), 18);
+}
+
 describe("MuishToken", function () {
   let MuishToken, token;
   let admin, multisig, treasury, user1;
-  const initialMint = ethers.parseEther("100000000"); // 100M MUISH
+  const initialMint = toWei("100000000"); // 100M MUISH
 
   beforeEach(async function () {
     [admin, multisig, treasury, user1] = await ethers.getSigners();
@@ -29,7 +33,7 @@ describe("MuishToken", function () {
   });
 
   it("should not allow minting beyond max supply", async function () {
-    const max = await token.MAX_SUPPLY();
+    const max = await token.maxSupply();
     await expect(
       token.connect(multisig).mint(user1.address, max)
     ).to.be.revertedWith("Exceeds max supply");
@@ -61,11 +65,26 @@ describe("MuishToken", function () {
   });
 
   it("should not exceed max total supply", async function () {
-    const max = await token.MAX_SUPPLY();
+    const max = await token.maxSupply();
     const current = await token.totalSupply();
     const over = max - current + 1n;
     await expect(
       token.connect(multisig).mint(user1.address, over)
     ).to.be.revertedWith("Exceeds max supply");
+  });
+
+  it("should enforce the fixed max supply of 12B MUISH", async function () {
+    const maxSupply = await token.maxSupply();
+    expect(maxSupply).to.equal(toWei(12_000_000_000));
+
+    const totalMinted = await token.totalSupply();
+    const remaining = maxSupply - totalMinted;
+
+    // Mint up to the cap
+    await token.connect(multisig).mint(user1.address, remaining);
+    expect(await token.totalSupply()).to.equal(maxSupply);
+
+    // Try to mint one more wei — should fail
+    await expect(token.connect(multisig).mint(user1.address, 1)).to.be.revertedWith("Exceeds max supply");
   });
 });

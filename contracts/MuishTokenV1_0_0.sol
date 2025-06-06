@@ -23,7 +23,7 @@ contract MuishTokenV1_0_0 is
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant UPGRADER_ROLE = keccak256("UPGRADER_ROLE");
 
-    uint256 public constant MAX_SUPPLY = 1_000_000_000 * 1e18;
+    uint256 private _maxSupply;
 
     event Minted(address indexed to, uint256 amount);
     event RoleBurn(address indexed from, uint256 amount);
@@ -40,7 +40,8 @@ contract MuishTokenV1_0_0 is
         __AccessControl_init();
         __UUPSUpgradeable_init();
 
-        require(treasuryInitialMint <= MAX_SUPPLY, "Exceeds max supply");
+        _maxSupply = 12_000_000_000 * 1e18;
+        require(treasuryInitialMint <= _maxSupply, "Exceeds max supply");
 
         _grantRole(DEFAULT_ADMIN_ROLE, admin);
         _grantRole(MINTER_ROLE, multisig);
@@ -52,6 +53,10 @@ contract MuishTokenV1_0_0 is
         emit Minted(treasury, treasuryInitialMint);
     }
 
+    function maxSupply() public view returns (uint256) {
+        return _maxSupply;
+    }
+
     function pause() external onlyRole(PAUSER_ROLE) {
         _pause();
     }
@@ -61,7 +66,7 @@ contract MuishTokenV1_0_0 is
     }
 
     function mint(address to, uint256 amount) external onlyRole(MINTER_ROLE) {
-        require(totalSupply() + amount <= MAX_SUPPLY, "Exceeds max supply");
+        require(totalSupply() + amount <= _maxSupply, "Exceeds max supply");
         _mint(to, amount);
         emit Minted(to, amount);
     }
@@ -89,5 +94,5 @@ contract MuishTokenV1_0_0 is
         onlyRole(UPGRADER_ROLE)
     {}
 
-    uint256[50] private __gap;
+    uint256[49] private __gap; // reduced by 1 to account for _maxSupply slot
 }
