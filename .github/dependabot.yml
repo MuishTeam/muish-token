@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # For package.json and package-lock.json
+    directory: "/"           # Root of the repo
+    schedule:
+      interval: "weekly"     # Check once a week
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-type: "direct"
+
+  - package-ecosystem: "github-actions" # For .github/workflows
+    directory: "/"                      # Still root; it scans workflows internally
+    schedule:
+      interval: "weekly"
