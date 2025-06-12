@@ -8,15 +8,17 @@ module.exports = {
   solidity: "0.8.22",
   networks: {
     hardhat: {},
-    amoy: {
-      url: AMOY_RPC_URL || "", // ← fallback to empty string
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      chainId: 80002,
-    },
+    ...(AMOY_RPC_URL && {
+      amoy: {
+        url: AMOY_RPC_URL,
+        accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+        chainId: 80002,
+      },
+    }),
   },
   etherscan: {
     apiKey: {
-      polygonAmoy: ETHERSCAN_API_KEY,
+      polygonAmoy: ETHERSCAN_API_KEY || "",
     },
   },
 };
