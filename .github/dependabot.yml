@@ -1,14 +1,27 @@
 version: 2
 updates:
-  - package-ecosystem: "npm" # For package.json and package-lock.json
-    directory: "/"           # Root of the repo
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: "weekly"     # Check once a week
+      interval: "weekly"
+      day: "monday"
     open-pull-requests-limit: 5
     allow:
       - dependency-type: "direct"
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+      - "auto-update"
 
-  - package-ecosystem: "github-actions" # For .github/workflows
-    directory: "/"                      # Still root; it scans workflows internally
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "actions"
+    labels:
+      - "github-actions"
+      - "auto-update"
